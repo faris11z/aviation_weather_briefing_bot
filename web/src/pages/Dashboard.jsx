@@ -34,7 +34,7 @@ export default function Dashboard() {
       for (const s of res.stations || []) map[s.station] = s;
       setData(map);
     } catch (e) {
-      setError("Failed to fetch weather data");
+      setError("Could not refresh weather data. Check your connection.");
     } finally {
       setLoading(false);
     }

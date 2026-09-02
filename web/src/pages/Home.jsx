@@ -14,12 +14,17 @@ export default function Home() {
     setStation(icao);
     setLoading(true);
     setError(null);
+    setData(null);
     try {
       const res = await fetchBrief(icao);
-      setData(res.stations?.[0] || null);
+      const first = res.stations?.[0] || null;
+      if (first && (first.metar || first.taf)) {
+        setData(first);
+      } else {
+        setError(`No weather data found for ${icao}`);
+      }
     } catch (e) {
       setError(`Failed to fetch weather for ${icao}`);
-      setData(null);
     } finally {
       setLoading(false);
     }
