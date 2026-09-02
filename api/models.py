@@ -43,3 +43,15 @@ class StationSearchResult(BaseModel):
     country: str
     lat: float
     lon: float
+
+
+class StationInfo(BaseModel):
+    icao: str
+    name: str
+    iata: str = ""
+    faa: str = ""
+    wmo: str = ""
+    state: str = ""
+    country: str = ""
+    lat: float = 0.0
+    lon: float = 0.0

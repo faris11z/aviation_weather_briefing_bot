@@ -31,3 +31,11 @@ export async function searchAirports(query) {
   if (!r.ok) throw new Error(`API error: ${r.status}`);
   return r.json();
 }
+
+export async function fetchAirportInfo(codes) {
+  const r = await fetch(
+    `${API_BASE}/airports/info?codes=${encodeURIComponent(codes)}`
+  );
+  if (!r.ok) throw new Error(`API error: ${r.status}`);
+  return r.json();
+}

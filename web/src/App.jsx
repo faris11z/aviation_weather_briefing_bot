@@ -1,6 +1,7 @@
 import { Routes, Route, Link } from "react-router-dom";
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
+import Codes from "./pages/Codes";
 
 export default function App() {
   return (
@@ -12,12 +13,14 @@ export default function App() {
         <nav>
           <Link to="/">Home</Link>
           <Link to="/dashboard">Dashboard</Link>
+          <Link to="/codes">Airport Codes</Link>
         </nav>
       </header>
       <main>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/codes" element={<Codes />} />
         </Routes>
       </main>
     </div>

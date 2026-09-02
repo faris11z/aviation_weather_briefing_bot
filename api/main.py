@@ -14,7 +14,7 @@ from bot.fetcher import get_metar, get_taf
 
 from .models import (
     BatchResponse, BriefingResponse, MetarResponse,
-    StationSearchResult, TafForecast, TafResponse,
+    StationInfo, StationSearchResult, TafForecast, TafResponse,
 )
 
 BASE_URL = "https://aviationweather.gov/api/data"
@@ -86,7 +86,7 @@ async def brief(station: str = Query(...), hours: int = Query(12, ge=1, le=72)):
         return cached_data
 
     station_list = [s.strip().upper() for s in station.replace(",", " ").split() if s.strip()]
-    codes = " ".join(station_list)
+    codes = ",".join(station_list)
 
     metar_data = await get_metar(codes, hours)
     taf_data = await get_taf(codes)
@@ -132,29 +132,65 @@ async def taf(station: str = Query(...), hours: int = Query(24, ge=1, le=72)):
     return resp
 
 
-@app.get("/api/airports/search")
-async def search(q: str = Query(..., min_length=1), limit: int = Query(5, ge=1, le=20)):
-    async with httpx.AsyncClient(timeout=15) as client:
-        r = await client.get(f"{BASE_URL}/stationInfo", params={"format": "json", "stype": "all"})
-
+async def fetch_station_info(codes: list[str]) -> list[dict]:
+    """Fetch station records from the government API for the given ICAO codes."""
+    if not codes:
+        return []
+    params = {"format": "json", "stype": "all", "ids": ",".join(codes)}
+    async with httpx.AsyncClient(timeout=20) as client:
+        r = await client.get(f"{BASE_URL}/stationInfo", params=params)
     if r.status_code != 200:
         return []
-
     data = r.json()
-    if not isinstance(data, list):
+    return data if isinstance(data, list) else []
+
+
+@app.get("/api/airports/search")
+async def search(q: str = Query(..., min_length=1), limit: int = Query(5, ge=1, le=20)):
+    # The gov API no longer returns a full world list, so we do a direct
+    # lookup on the query as an ICAO code.
+    q_upper = q.strip().upper()
+    if not (2 <= len(q_upper) <= 4 and q_upper.isalnum()):
         return []
 
-    q_upper = q.upper()
-    matches = []
+    data = await fetch_station_info([q_upper])
+    out = []
     for s in data:
-        icao = s.get("icaoId", "")
-        name = s.get("name", "")
-        if q_upper in icao.upper() or q.upper() in name.upper():
-            matches.append(StationSearchResult(
-                icao=icao, name=name,
-                country=s.get("country", ""),
-                lat=s.get("lat", 0.0), lon=s.get("lon", 0.0),
-            ))
-            if len(matches) >= limit:
-                break
-    return matches
+        out.append(StationSearchResult(
+            icao=s.get("icaoId", ""),
+            name=s.get("site", ""),
+            country=s.get("country", ""),
+            lat=s.get("lat", 0.0), lon=s.get("lon", 0.0),
+        ))
+    return out[:limit]
+
+
+@app.get("/api/airports/info")
+async def airport_info(codes: str = Query(..., min_length=1)):
+    """Return full-form details for one or more ICAO codes (worldwide)."""
+    code_list = [s.strip().upper() for s in codes.replace(",", " ").split() if s.strip()]
+    code_list = code_list[:10]  # safety cap
+
+    data = await fetch_station_info(code_list)
+    found = {}
+    for s in data:
+        found[s.get("icaoId", "").upper()] = s
+
+    results = []
+    for code in code_list:
+        s = found.get(code)
+        if s is None:
+            results.append(StationInfo(icao=code, name="Not found"))
+            continue
+        results.append(StationInfo(
+            icao=s.get("icaoId", code),
+            name=s.get("site", ""),
+            iata=s.get("iataId", "") or "",
+            faa=s.get("faaId", "") or "",
+            wmo=s.get("wmoId", "") or "",
+            state=s.get("state", "") or "",
+            country=s.get("country", "") or "",
+            lat=s.get("lat", 0.0),
+            lon=s.get("lon", 0.0),
+        ))
+    return results

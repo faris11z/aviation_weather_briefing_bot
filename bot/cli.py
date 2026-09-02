@@ -38,7 +38,7 @@ def _parse_stations(stations: str) -> list[str]:
 
 async def _brief(stations: str, hours: int, raw: bool) -> None:
     station_list = _parse_stations(stations)
-    codes = " ".join(station_list)
+    codes = ",".join(station_list)
 
     metar_data = await fetcher.get_metar(codes, hours)
     taf_data = await fetcher.get_taf(codes)
@@ -73,7 +73,7 @@ async def _brief(stations: str, hours: int, raw: bool) -> None:
 
 async def _metar(stations: str, hours: int, raw: bool) -> None:
     station_list = _parse_stations(stations)
-    data = await fetcher.get_metar(" ".join(station_list), hours)
+    data = await fetcher.get_metar(",".join(station_list), hours)
 
     for s in station_list:
         s = s.upper()
@@ -90,7 +90,7 @@ async def _metar(stations: str, hours: int, raw: bool) -> None:
 
 async def _taf(stations: str, hours: int) -> None:
     station_list = _parse_stations(stations)
-    data = await fetcher.get_taf(" ".join(station_list))
+    data = await fetcher.get_taf(",".join(station_list))
 
     for s in station_list:
         s = s.upper()
