@@ -2,3 +2,9 @@ __pycache__/
 *.pyc
 *.egg-info/
 .venv/
+web/node_modules/
+web/dist/
+.env
+plan.md
+overview.md
+walkthrough.html

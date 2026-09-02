@@ -1,8 +1,8 @@
 # Aviation Weather Briefing Bot
 
-Free, CLI-based aviation weather briefing bot. Fetches **METAR** and **TAF** data from the [aviationweather.gov](https://aviationweather.gov/api/data) API — no API key required.
+Free aviation weather briefing tool — CLI and web app. Fetches **METAR** and **TAF** data from the [aviationweather.gov](https://aviationweather.gov/api/data) API — no API key required.
 
-## Quick start
+## CLI
 
 ```bash
 pip install -r requirements.txt
@@ -13,38 +13,37 @@ weather-bot metar KLAX   # METAR only
 weather-bot taf KLAX     # TAF only
 ```
 
-## Commands
-
-| Command | Description |
-|---------|-------------|
-| `brief <stations>` | Full weather briefing (METAR + TAF) |
-| `metar <stations>` | Current METAR reports |
-| `taf <stations>` | Terminal Aerodrome Forecasts |
-
-### Options
-
 | Flag | Default | Description |
 |------|---------|-------------|
 | `--hours / -h` | 12 (brief), 3 (metar), 24 (taf) | Lookback window (1–72h) |
 | `--raw / -r` | off | Show raw report text |
 
-### Examples
+## Web App
+
+Two-part architecture: FastAPI backend (Render) + React frontend (Netlify).
+
+### Backend
 
 ```bash
-# Briefing for multiple airports
-weather-bot brief KLAX,KLAS,KSEA
-
-# Get raw METARs for the last 6 hours
-weather-bot metar KLAX --hours 6 --raw
-
-# TAF only
-weather-bot taf EGLL
+pip install -r api/requirements.txt
+uvicorn api.main:app --reload
 ```
+
+Endpoints: `/api/weather/brief`, `/api/weather/metar`, `/api/weather/taf`, `/api/airports/search`
+
+### Frontend
+
+```bash
+cd web && npm install && npm run dev
+```
+
+Set `VITE_API_URL` env var to your backend URL in production.
+
+### Deploy
+
+- **Backend**: Push to GitHub → deploy on Render (free tier)
+- **Frontend**: Push to GitHub → deploy on Netlify (free tier)
 
 ## Data source
 
 Primary: [Aviation Weather Center API](https://aviationweather.gov/api/data) — US government, free, no key.
-
-Alternatives (add your own integration):
-- [CheckWX API](https://www.checkwxapi.com/) — free tier, global coverage, JSON
-- [AVWX API](https://info.avwx.rest/) — free hobby tier, English-translated METARs
