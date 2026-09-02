@@ -1,4 +1,5 @@
-const API_BASE = import.meta.env.VITE_API_URL || "/api";
+const RAW = (import.meta.env.VITE_API_URL || "").replace(/\/+$/, "");
+const API_BASE = RAW.endsWith("/api") ? RAW : RAW ? `${RAW}/api` : "/api";
 
 export async function fetchBrief(station, hours = 12) {
   const r = await fetch(
