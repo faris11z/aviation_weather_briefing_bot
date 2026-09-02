@@ -4,7 +4,7 @@ export default function MetarCard({ metar }) {
   return (
     <div className="card">
       <div className="card-header">
-        <span className="card-title">METAR — {metar.station}</span>
+        <span className="card-title">METAR - {metar.station}</span>
         {metar.flight_category && (
           <span className={`flight-category ${metar.flight_category}`}>
             {metar.flight_category}

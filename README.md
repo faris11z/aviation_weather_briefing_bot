@@ -1,6 +1,6 @@
 # Aviation Weather Briefing Bot
 
-Free aviation weather briefing tool — CLI and web app. Fetches **METAR** and **TAF** data from the [aviationweather.gov](https://aviationweather.gov/api/data) API — no API key required.
+Free aviation weather briefing tool - CLI and web app. Fetches **METAR** and **TAF** data from the [aviationweather.gov](https://aviationweather.gov/api/data) API - no API key required.
 
 ## CLI
 
@@ -46,4 +46,4 @@ Set `VITE_API_URL` env var to your backend URL in production.
 
 ## Data source
 
-Primary: [Aviation Weather Center API](https://aviationweather.gov/api/data) — US government, free, no key.
+Primary: [Aviation Weather Center API](https://aviationweather.gov/api/data) - US government, free, no key.

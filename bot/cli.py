@@ -5,7 +5,7 @@ import typer
 
 from . import fetcher, parser, formatter
 
-app = typer.Typer(help="Aviation weather briefing bot — free METAR/TAF from aviationweather.gov")
+app = typer.Typer(help="Aviation weather briefing bot - free METAR/TAF from aviationweather.gov")
 
 
 @app.command()

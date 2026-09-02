@@ -4,7 +4,7 @@ export default function TafCard({ taf }) {
   return (
     <div className="card">
       <div className="card-header">
-        <span className="card-title">TAF — {taf.station}</span>
+        <span className="card-title">TAF - {taf.station}</span>
         {taf.issue_time && (
           <span className="field-value" style={{ fontSize: 12, color: "var(--text-muted)" }}>
             Issued {taf.issue_time}

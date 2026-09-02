@@ -8,7 +8,7 @@ console = Console()
 
 def print_metar(parsed: dict) -> None:
     """Print a parsed METAR as a nice table."""
-    table = Table(title=f"METAR — {parsed.get('station', '?')}", box=None)
+    table = Table(title=f"METAR - {parsed.get('station', '?')}", box=None)
     table.add_column("Field", style="cyan")
     table.add_column("Value")
 
@@ -26,7 +26,7 @@ def print_metar(parsed: dict) -> None:
 
 def print_taf(parsed: dict) -> None:
     """Print a parsed TAF as a nice table."""
-    table = Table(title=f"TAF — {parsed.get('station', '?')}", box=None)
+    table = Table(title=f"TAF - {parsed.get('station', '?')}", box=None)
     table.add_column("Period", style="cyan")
     table.add_column("Forecast")
 
@@ -39,7 +39,7 @@ def print_taf(parsed: dict) -> None:
 
 def print_briefing(station: str, metar: dict, taf: dict) -> None:
     """Print a full weather briefing (METAR + TAF) for one station."""
-    console.print(f"\n  ✈  WEATHER BRIEFING — {station}", style="bold yellow")
+    console.print(f"\n  ✈  WEATHER BRIEFING - {station}", style="bold yellow")
     print_metar(metar)
     print_taf(taf)
     console.print()
