@@ -4,5 +4,5 @@
 
 [[redirects]]
   from = "/api/*"
-  to = "https://aviation-weather-api.onrender.com/api/:splat"
+  to = "https://aviation-weather-api-b0ui.onrender.com/api/:splat"
   status = 200
