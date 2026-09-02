@@ -11,7 +11,7 @@ export default function App() {
           ✈ Aviation Weather
         </Link>
         <nav>
-          <Link to="/home">Home</Link>
+          <Link to="/">Home</Link>
           <Link to="/dashboard">Dashboard</Link>
           <Link to="/codes">Airport Codes</Link>
         </nav>
@@ -19,7 +19,6 @@ export default function App() {
       <main>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/home" element={<Home />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/codes" element={<Codes />} />
         </Routes>
